@@ -3,41 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
-{   int inputDirX;
-    int inputDirY;
+{
+    Rigidbody2D rb2D;
+    Vector2 inputDir;
 
+    private void Awake()
+    {
+        rb2D = GetComponent<Rigidbody2D>();
+    }
     private void Update()
     {
-        void GetInput(KeyCode plusKeyX, KeyCode minusKeyX, KeyCode plusKeyY, KeyCode minusKeyY)
-        {
-            if (Input.GetKeyDown(plusKeyX))
-                inputDirX = 1;
-            if (Input.GetKeyDown(minusKeyX))
-                inputDirX = -1;
+        inputDir.x = GetInput(inputDir.x, KeyCode.D, KeyCode.A);
+        inputDir.y = GetInput(inputDir.y, KeyCode.W, KeyCode.S);
+    }
+    private void FixedUpdate()
+    {
+        Move();
+    }
 
-            if (Input.GetKey(minusKeyX) && Input.GetKeyUp(plusKeyX))
-                inputDirX = -1;
-            if (Input.GetKey(plusKeyX) && Input.GetKeyUp(minusKeyX))
-                inputDirX = 1;
+    float GetInput(float input, KeyCode plusKey, KeyCode minusKey)
+    {
+        if (Input.GetKeyDown(plusKey))
+            input = 1;
+        if (Input.GetKeyDown(minusKey))
+            input = -1;
 
-            if (!Input.GetKey(plusKeyX) && !Input.GetKey(minusKeyX))
-                inputDirX = 0;
+        if (Input.GetKey(minusKey) && Input.GetKeyUp(plusKey))
+            input = -1;
+        if (Input.GetKey(plusKey) && Input.GetKeyUp(minusKey))
+            input = 1;
 
-            if (Input.GetKeyDown(plusKeyY))
-                inputDirY = 1;
-            if (Input.GetKeyDown(minusKeyY))
-                inputDirY = -1;
+        if (!Input.GetKey(plusKey) && !Input.GetKey(minusKey))
+            input = 0;
 
-            if (Input.GetKey(minusKeyY) && Input.GetKeyUp(plusKeyY))
-                inputDirY = -1;
-            if (Input.GetKey(plusKeyY) && Input.GetKeyUp(minusKeyY))
-                inputDirY = 1;
+        return input;
+    }
 
-            if (!Input.GetKey(plusKeyY) && !Input.GetKey(minusKeyY))
-                inputDirY = 0;
-        }
-        GetInput(KeyCode.D, KeyCode.A, KeyCode.W, KeyCode.S);
-        Debug.Log(inputDirX);
-        Debug.Log(inputDirY);
+    void Move()
+    {
+        rb2D.velocity = inputDir.normalized * 10f;
     }
 }
