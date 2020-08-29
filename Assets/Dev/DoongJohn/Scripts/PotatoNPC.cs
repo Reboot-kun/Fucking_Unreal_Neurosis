@@ -7,6 +7,7 @@ public class PotatoNPC : MonoBehaviour
     MapManager mapManager;
     Rigidbody2D rb2D;
     Transform player;
+    [SerializeField] float moveSpeed;
 
     List<Node> movePath = new List<Node>();
 
@@ -39,8 +40,9 @@ public class PotatoNPC : MonoBehaviour
     void Move()
     {
         var (curX, curY) = GetGridPos(transform);
-        //var (targetX, targetY) = GetGridPos(player);
-        var (targetX, targetY) = (4, 4);
+
+        var (targetX, targetY) = GetGridPos(player);
+        //var (targetX, targetY) = (4, 4);
 
         Vector2 targetWorldPos;
         float dist = float.PositiveInfinity;
@@ -61,6 +63,6 @@ public class PotatoNPC : MonoBehaviour
         dist = Vector2.Distance(targetWorldPos, transform.position);
 
         Vector2 moveDir = (targetWorldPos - (Vector2)transform.position).normalized;
-        rb2D.velocity = moveDir * Mathf.Min(dist / Time.fixedDeltaTime, 10f);
+        rb2D.velocity = moveDir * Mathf.Min(dist / Time.fixedDeltaTime, moveSpeed);
     }
 }

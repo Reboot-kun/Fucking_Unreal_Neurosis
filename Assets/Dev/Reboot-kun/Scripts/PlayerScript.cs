@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     Rigidbody2D rb2D;
     Vector2 inputDir;
+    [SerializeField] float moveSpeed;
 
     private void Awake()
     {
@@ -41,6 +42,6 @@ public class PlayerScript : MonoBehaviour
 
     void Move()
     {
-        rb2D.velocity = inputDir.normalized * 20f;
+        rb2D.velocity = inputDir.normalized * moveSpeed;
     }
 }
