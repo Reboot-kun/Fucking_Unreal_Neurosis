@@ -69,6 +69,19 @@ public class PlayerScript : MonoBehaviour
         float dashTimeTotal = dashDist / dashSpeed;
         Collider2D[] dashHitBox = Physics2D.OverlapCircleAll(transform.position, 0.5f);
 
+        for (int i = 0; i < dashHitBox.Length; i++)
+        {
+            if (dashHitBox[i].gameObject == gameObject)
+                continue;
+
+
+            Rigidbody2D npcRb2D = dashHitBox[i].gameObject.GetComponent<Rigidbody2D>();
+            if (npcRb2D == null)
+                continue;
+
+            //npcRb2D.velocity = asdasd
+        }
+
         dashTime += Time.deltaTime;
         if (dashTime >= dashTimeTotal)
         {
@@ -78,6 +91,4 @@ public class PlayerScript : MonoBehaviour
             canShoot = true;
         }
     }
-
-
 }
