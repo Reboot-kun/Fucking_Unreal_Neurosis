@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     Rigidbody2D rb2D;
     Vector2 inputDir;
+    Vector2 dashDir;
     [SerializeField] float moveSpeed;
     [SerializeField] float dashSpeed;
     [SerializeField] float dashDist;
@@ -18,16 +19,20 @@ public class PlayerScript : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
     }
+
     private void Update()
     {
         inputDir.x = GetInput(inputDir.x, KeyCode.D, KeyCode.A);
         inputDir.y = GetInput(inputDir.y, KeyCode.W, KeyCode.S);
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (!isDashing)
+            GetDashInput(KeyCode.D, KeyCode.A, KeyCode.W, KeyCode.S);
+        if (Input.GetKeyDown(KeyCode.LeftShift) && (dashDir.x != 0 || dashDir.y != 0))
         {
             isDashing = true;
             canWalk = false;
         }
     }
+
     private void FixedUpdate()
     {
         if (canWalk)
@@ -57,7 +62,23 @@ public class PlayerScript : MonoBehaviour
         return input;
     }
 
-    
+    void GetDashInput(KeyCode plusKeyX, KeyCode minusKeyX, KeyCode plusKeyY, KeyCode minusKeyY)
+    {
+
+        if (Input.GetKeyDown(plusKeyX))
+            dashDir.x = 1;
+        if (Input.GetKeyDown(minusKeyX))
+            dashDir.x = -1;
+        if (Input.GetKey(plusKeyX) && Input.GetKey(minusKeyX))
+            dashDir.x = 0;
+
+        if (Input.GetKeyDown(plusKeyY))
+            dashDir.y = 1;
+        if (Input.GetKeyDown(minusKeyY))
+            dashDir.y = -1;
+        if (Input.GetKey(plusKeyY) && Input.GetKey(minusKeyY))
+            dashDir.y = 0;
+    }
 
     void Walk()
     {
@@ -90,5 +111,7 @@ public class PlayerScript : MonoBehaviour
             canWalk = true;
             canShoot = true;
         }
+
+        rb2D.velocity = dashDir * dashSpeed;
     }
 }
