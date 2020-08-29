@@ -41,6 +41,6 @@ public class PlayerScript : MonoBehaviour
 
     void Move()
     {
-        rb2D.velocity = inputDir.normalized * 10f;
+        rb2D.velocity = inputDir.normalized * 20f;
     }
 }
